@@ -4,6 +4,7 @@ namespace App\Mcp\Servers;
 
 use App\Mcp\Tools\CreateBoardTool;
 use App\Mcp\Tools\CreateTaskTool;
+use App\Mcp\Tools\MoveTaskTool;
 use App\Mcp\Tools\UpdateTaskStatusTool;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
@@ -18,7 +19,8 @@ class TaskManagementServer extends Server
     protected array $tools = [
         CreateBoardTool::class,
         CreateTaskTool::class,
-        UpdateTaskStatusTool::class
+        UpdateTaskStatusTool::class,
+        MoveTaskTool::class
     ];
 
     protected array $resources = [
