@@ -26,6 +26,15 @@ class Task extends Model
         'position',
     ];
 
+    /**
+     * Default attribute values — a task starts as "todo" with medium priority
+     * unless the caller overrides them.
+     */
+    protected $attributes = [
+        'status' => TaskStatus::Todo->value,
+        'priority' => TaskPriority::Medium->value,
+    ];
+
     protected static function booted(): void
     {
         static::creating(function (Task $task) {
@@ -34,7 +43,7 @@ class Task extends Model
                 $seq = static::where('board_id', $task->board_id)->count() + 1;
 
                 do {
-                    $code = $prefix.'-'.$seq;
+                    $code = $prefix . '-' . $seq;
                     $seq++;
                 } while (static::where('code', $code)->exists());
 
