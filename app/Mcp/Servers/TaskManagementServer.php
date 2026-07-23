@@ -3,6 +3,7 @@
 namespace App\Mcp\Servers;
 
 use App\Mcp\Resources\BoardsResource;
+use App\Mcp\Resources\TasksResource;
 use App\Mcp\Tools\CreateBoardTool;
 use App\Mcp\Tools\CreateTaskTool;
 use App\Mcp\Tools\DeleteTaskTool;
@@ -29,7 +30,8 @@ class TaskManagementServer extends Server
     ];
 
     protected array $resources = [
-        BoardsResource::class
+        BoardsResource::class,
+        TasksResource::class
     ];
 
     protected array $prompts = [
