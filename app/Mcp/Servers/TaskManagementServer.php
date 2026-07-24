@@ -8,6 +8,7 @@ use App\Mcp\Resources\TasksResource;
 use App\Mcp\Tools\CreateBoardTool;
 use App\Mcp\Tools\CreateTaskTool;
 use App\Mcp\Tools\DeleteTaskTool;
+use App\Mcp\Tools\ListBoardsTool;
 use App\Mcp\Tools\MoveTaskTool;
 use App\Mcp\Tools\SearchTaskTool;
 use App\Mcp\Tools\UpdateTaskStatusTool;
@@ -22,6 +23,7 @@ use Laravel\Mcp\Server\Attributes\Version;
 class TaskManagementServer extends Server
 {
     protected array $tools = [
+        ListBoardsTool::class,
         CreateBoardTool::class,
         CreateTaskTool::class,
         UpdateTaskStatusTool::class,
