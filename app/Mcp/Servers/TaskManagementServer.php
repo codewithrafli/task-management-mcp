@@ -2,6 +2,7 @@
 
 namespace App\Mcp\Servers;
 
+use App\Mcp\Prompts\PlanBoardPrompt;
 use App\Mcp\Resources\BoardsResource;
 use App\Mcp\Resources\TasksResource;
 use App\Mcp\Tools\CreateBoardTool;
@@ -35,6 +36,6 @@ class TaskManagementServer extends Server
     ];
 
     protected array $prompts = [
-        //
+        PlanBoardPrompt::class
     ];
 }
