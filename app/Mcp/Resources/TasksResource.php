@@ -2,6 +2,7 @@
 
 namespace App\Mcp\Resources;
 
+use App\Mcp\Concerns\InteractWithBoards;
 use App\Models\Task;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
@@ -15,12 +16,14 @@ use Laravel\Mcp\Server\Resource;
 #[MimeType('application/json')]
 class TasksResource extends Resource
 {
+    use InteractWithBoards;
+
     /**
      * Handle the resource request.
      */
     public function handle(Request $request): Response
     {
-        $tasks = Task::query()
+        $tasks = $this->tasksQuery($request->user())
             ->orderBy('board_id')
             ->orderBy('position')
             ->get()

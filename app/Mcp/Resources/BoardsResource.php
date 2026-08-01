@@ -2,6 +2,7 @@
 
 namespace App\Mcp\Resources;
 
+use App\Mcp\Concerns\InteractWithBoards;
 use App\Models\Board;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
@@ -15,12 +16,14 @@ use Laravel\Mcp\Server\Resource;
 #[MimeType('application/json')]
 class BoardsResource extends Resource
 {
+    use InteractWithBoards;
+
     /**
      * Handle the resource request.
      */
     public function handle(Request $request): Response
     {
-        $boards = Board::query()
+        $boards = $this->boardsQuery($request->user())
             ->withCount('tasks')
             ->latest()
             ->get()
