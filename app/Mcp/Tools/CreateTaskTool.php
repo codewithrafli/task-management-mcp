@@ -5,6 +5,7 @@ namespace App\Mcp\Tools;
 use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use App\Http\Requests\StoreTaskRequest;
+use App\Mcp\Concerns\InteractWithBoards;
 use App\Models\Board;
 use App\Services\TaskService;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -17,6 +18,8 @@ use Laravel\Mcp\Server\Tool;
 #[Description('Create a new task inside a board. Returns the created task with its code, status and priority.')]
 class CreateTaskTool extends Tool
 {
+    use InteractWithBoards;
+
     public function __construct(private readonly TaskService $tasks) {}
 
     /**
@@ -26,9 +29,17 @@ class CreateTaskTool extends Tool
     {
         $validated = $request->validate((new StoreTaskRequest)->rules());
 
-        $task = $this->tasks->create([...$validated]);
+        $board = $this->resolveBoard($validated['board_id'], $request->user());
 
-        $board = Board::find($validated['board_id']);
+        if ($board === null) {
+            return Response::error("Board #{$validated['board_id']} not found.");
+        }
+
+        if (isset($validated['assignee_id']) && ! in_array($validated['assignee_id'], $board->teamIds(), true)) {
+            return Response::error('The assignee must be a member of the board.');
+        }
+
+        $task = $this->tasks->create([...$validated]);
 
         return Response::text(sprintf(
             'Task %s "%s" created in board "%s" (status: %s, priority: %s).',

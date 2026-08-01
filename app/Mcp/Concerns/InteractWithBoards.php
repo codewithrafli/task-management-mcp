@@ -30,4 +30,19 @@ trait InteractWithBoards
 
         return $query;
     }
+
+    protected function resolveBoard(int|string $ref, ?Authenticatable $user)
+    {
+        $board = Board::resolveRef($ref);
+
+        if ($board === null) {
+            return null;
+        }
+
+        if ($user instanceof User && !$board->hasAccess($user)) {
+            return null;
+        }
+
+        return $board;
+    }
 }
