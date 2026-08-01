@@ -8,6 +8,8 @@ use App\Models\Board;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TaskService
@@ -69,7 +71,7 @@ class TaskService
 
     public function search(string $term, ?Board $board = null): Collection
     {
-        return Task::query()
+        return $this->tasksQuery(Auth::user())
             ->when($board, fn($q) => $q->where('board_id', $board->id))
             ->search($term)
             ->orderBy('position')
