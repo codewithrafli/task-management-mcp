@@ -2,6 +2,7 @@
 
 namespace App\Mcp\Tools;
 
+use App\Mcp\Concerns\InteractWithBoards;
 use App\Models\Board;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\Types\Type;
@@ -15,12 +16,14 @@ use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 #[IsReadOnly()]
 class ListBoardsTool extends Tool
 {
+    use InteractWithBoards;
+
     /**
      * Handle the tool request.
      */
     public function handle(Request $request): Response
     {
-        $boards = Board::query()
+        $boards = $this->boardsQuery($request->user())
             ->withCount('tasks')
             ->latest()
             ->get();
