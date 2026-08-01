@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\TaskStatus;
+use App\Mcp\Concerns\InteractWithBoards;
 use App\Models\Board;
 use App\Models\Task;
 use App\Models\User;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class TaskService
 {
+    use InteractWithBoards;
+
     public function create(array $data): Task
     {
         $data['position'] ??= (int) Task::where('board_id', $data['board_id'])
@@ -67,7 +70,7 @@ class TaskService
     public function search(string $term, ?Board $board = null): Collection
     {
         return Task::query()
-            ->when($board, fn ($q) => $q->where('board_id', $board->id))
+            ->when($board, fn($q) => $q->where('board_id', $board->id))
             ->search($term)
             ->orderBy('position')
             ->get();
